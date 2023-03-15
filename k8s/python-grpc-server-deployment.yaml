@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: python-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: python-server
+      version: v1
+  template:
+    metadata:
+      labels:
+        app: python-server
+        version: v1
+    spec:
+      containers:
+        - name: python-server
+          image: build-docker-stage.artifactory.eng.vmware.com/ptss_python_grpc_server:0.0.2
+          ports:
+            - name: grpc-server
+              containerPort: 50051
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: server
+  labels:
+    app: server
+spec:
+  ports:
+  - name: grpc-server
+    port: 9090
+    targetPort: 50051
+    # Port name is very important: https://istio.io/docs/reference/config/istio.networking.v1alpha3/#VirtualService
+    # HTTP routes will be applied to platform service ports named ‘http-’/‘http2-’/‘grpc-*’
+  selector:
+    app: python-server
