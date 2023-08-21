@@ -1,5 +1,5 @@
-# go_signc
-go_signc is an updated / newly written version of signc where we eliminate a couple of cons from the previous version.
+# go_grpc client
+go_grpc client is a go based cli to communicate with the grpc service mesh.
 The protocol is updated to grpc now which gives us support for scalability, security and lot more features.
 
 ### Start the grpc python server
@@ -26,7 +26,7 @@ $ go run client.go
 
 ### Building the go client binary
 ```bash
-$ go build -o signc ./
+$ go build -o <cli_name> ./
 $ ./client --help
 ```
 
