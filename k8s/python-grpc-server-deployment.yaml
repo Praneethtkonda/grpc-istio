@@ -16,7 +16,8 @@ spec:
     spec:
       containers:
         - name: python-server
-          image: build-docker-stage.artifactory.eng.vmware.com/ptss_python_grpc_server:0.0.2
+          image: python_grpc_server:0.0.3
+          imagePullPolicy: Never
           ports:
             - name: grpc-server
               containerPort: 50051

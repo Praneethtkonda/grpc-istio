@@ -1,5 +1,5 @@
 # pull official base image
-FROM team-sigma-docker-local.artifactory.eng.vmware.com/signing-service/0.1/python:3.9.5-slim-buster
+FROM python:3.9.5-slim-buster
 
 # set work directory
 WORKDIR /app

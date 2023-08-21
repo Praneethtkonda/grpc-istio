@@ -36,7 +36,7 @@ class SignRequest(py_signc_pb2_grpc.SigningRequestServicer):
 async def serve() -> None:
     server = grpc.aio.server(futures.ThreadPoolExecutor(max_workers=4))
     py_signc_pb2_grpc.add_SigningRequestServicer_to_server(SignRequest(), server)
-    listen_addr = '127.0.0.1:50051'
+    listen_addr = '[::]:50051'
     server.add_insecure_port(listen_addr)
     logging.info("Starting server on %s", listen_addr)
     await server.start()
