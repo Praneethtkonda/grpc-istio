@@ -3,20 +3,20 @@ syntax = "proto3";
 package pb;
 option go_package = "./pb";
 
-service SigningRequest {
-  // Sends a signing request
-  rpc SendRequest (SignRequest) returns (SignResponse) {}
+service ClientRequest {
+  // Sends a client request
+  rpc SendRequest (Request) returns (Response) {}
   rpc UploadToServer(stream UploadRequest) returns (UploadResponse) {}
 }
 
-message SignRequest {
-  optional string signmethod = 1;
-  optional string keyid = 2;
+message Request {
+  optional string registration = 1;
+  optional string id = 2;
   optional string inputUrl = 3;
   optional string outputPath = 4;
 }
 
-message SignResponse {
+message Response {
   // Supports forward and backward compatibility
   optional string status = 1;
   optional string outputUrl = 2;

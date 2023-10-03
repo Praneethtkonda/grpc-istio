@@ -4,12 +4,12 @@ The protocol is updated to grpc now which gives us support for scalability, secu
 
 ### Start the grpc python server
 ```bash
-$ pip install -r requirement.txt
+$ pip install -r requirements.txt
 
 $ python -m grpc_tools.protoc -I . --python_out=. --grpc_python_out=. *.proto
 ```
 
-### Run the go grpc client to send the signing request (developer)
+### Run the go grpc client to send the client request (developer)
 #### Setting up the protobuf compiler environment
 ```bash
 $ export PATH=$PATH:$(go env GOPATH)/bin

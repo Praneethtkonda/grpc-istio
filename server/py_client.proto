@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+package pb;
+option go_package = "./pb";
+
+service ClientRequest {
+  // Sends a client request
+  rpc SendRequest (Request) returns (Response) {}
+  rpc UploadToServer(stream UploadRequest) returns (UploadResponse) {}
+}
+
+message Request {
+  optional string registration = 1;
+  optional string id = 2;
+  optional string inputUrl = 3;
+  optional string outputPath = 4;
+}
+
+message Response {
+  // Supports forward and backward compatibility
+  optional string status = 1;
+  optional string outputUrl = 2;
+}
+
+message UploadRequest {
+  string mime = 1;
+  bytes chunk = 2;
+}
+
+message UploadResponse {
+  string name = 1;
+}

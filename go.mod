@@ -1,4 +1,4 @@
-module go_signc
+module go_client_istio
 
 go 1.19
 

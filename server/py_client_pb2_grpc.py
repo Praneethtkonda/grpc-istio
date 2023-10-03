@@ -2,10 +2,10 @@
 """Client and server classes corresponding to protobuf-defined services."""
 import grpc
 
-import py_signc_pb2 as py__signc__pb2
+import py_client_pb2 as py__client__pb2
 
 
-class SigningRequestStub(object):
+class ClientRequestStub(object):
     """Missing associated documentation comment in .proto file."""
 
     def __init__(self, channel):
@@ -15,22 +15,22 @@ class SigningRequestStub(object):
             channel: A grpc.Channel.
         """
         self.SendRequest = channel.unary_unary(
-                '/pb.SigningRequest/SendRequest',
-                request_serializer=py__signc__pb2.SignRequest.SerializeToString,
-                response_deserializer=py__signc__pb2.SignResponse.FromString,
+                '/pb.ClientRequest/SendRequest',
+                request_serializer=py__client__pb2.Request.SerializeToString,
+                response_deserializer=py__client__pb2.Response.FromString,
                 )
         self.UploadToServer = channel.stream_unary(
-                '/pb.SigningRequest/UploadToServer',
-                request_serializer=py__signc__pb2.UploadRequest.SerializeToString,
-                response_deserializer=py__signc__pb2.UploadResponse.FromString,
+                '/pb.ClientRequest/UploadToServer',
+                request_serializer=py__client__pb2.UploadRequest.SerializeToString,
+                response_deserializer=py__client__pb2.UploadResponse.FromString,
                 )
 
 
-class SigningRequestServicer(object):
+class ClientRequestServicer(object):
     """Missing associated documentation comment in .proto file."""
 
     def SendRequest(self, request, context):
-        """Sends a signing request
+        """Sends a client request
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -43,26 +43,26 @@ class SigningRequestServicer(object):
         raise NotImplementedError('Method not implemented!')
 
 
-def add_SigningRequestServicer_to_server(servicer, server):
+def add_ClientRequestServicer_to_server(servicer, server):
     rpc_method_handlers = {
             'SendRequest': grpc.unary_unary_rpc_method_handler(
                     servicer.SendRequest,
-                    request_deserializer=py__signc__pb2.SignRequest.FromString,
-                    response_serializer=py__signc__pb2.SignResponse.SerializeToString,
+                    request_deserializer=py__client__pb2.Request.FromString,
+                    response_serializer=py__client__pb2.Response.SerializeToString,
             ),
             'UploadToServer': grpc.stream_unary_rpc_method_handler(
                     servicer.UploadToServer,
-                    request_deserializer=py__signc__pb2.UploadRequest.FromString,
-                    response_serializer=py__signc__pb2.UploadResponse.SerializeToString,
+                    request_deserializer=py__client__pb2.UploadRequest.FromString,
+                    response_serializer=py__client__pb2.UploadResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
-            'pb.SigningRequest', rpc_method_handlers)
+            'pb.ClientRequest', rpc_method_handlers)
     server.add_generic_rpc_handlers((generic_handler,))
 
 
  # This class is part of an EXPERIMENTAL API.
-class SigningRequest(object):
+class ClientRequest(object):
     """Missing associated documentation comment in .proto file."""
 
     @staticmethod
@@ -76,9 +76,9 @@ class SigningRequest(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/pb.SigningRequest/SendRequest',
-            py__signc__pb2.SignRequest.SerializeToString,
-            py__signc__pb2.SignResponse.FromString,
+        return grpc.experimental.unary_unary(request, target, '/pb.ClientRequest/SendRequest',
+            py__client__pb2.Request.SerializeToString,
+            py__client__pb2.Response.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -93,8 +93,8 @@ class SigningRequest(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.stream_unary(request_iterator, target, '/pb.SigningRequest/UploadToServer',
-            py__signc__pb2.UploadRequest.SerializeToString,
-            py__signc__pb2.UploadResponse.FromString,
+        return grpc.experimental.stream_unary(request_iterator, target, '/pb.ClientRequest/UploadToServer',
+            py__client__pb2.UploadRequest.SerializeToString,
+            py__client__pb2.UploadResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

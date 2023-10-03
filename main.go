@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
-	"go_signc/pb"
-	"go_signc/upload"
+	"go_client_istio/pb"
+	"go_client_istio/upload"
 
 	"context"
 	// "flag"
@@ -18,12 +18,12 @@ import (
 )
 
 const (
-	defaultName = "world"
-	defaultSignMethod = "digestsign"
-	defaultKey = "vmware_esx67"
-	defaultInputUrl = "/tmp/one.txt"
+	defaultName       = "world"
+	defaultMethod     = "registration"
+	defaultKey        = "vmware_esx67"
+	defaultInputUrl   = "/tmp/one.txt"
 	defaultOutputPath = "/tmp/out/out.txt"
-	version = "2.0.0"
+	version           = "2.0.0"
 )
 
 var (
@@ -32,14 +32,14 @@ var (
 	// url = "xds://192.168.49.2:15021"
 	url = "127.0.0.1:80"
 	// addr = flag.String("addr", url, "the address to connect to")
-	signmethod string = defaultSignMethod
-	keyid string = defaultKey
-	inputurl string = defaultInputUrl
-	outputurl string = defaultOutputPath
+	registration string = defaultMethod
+	keyid        string = defaultKey
+	inputurl     string = defaultInputUrl
+	outputurl    string = defaultOutputPath
 )
 
-func SignClient(args []string) {
-	fmt.Println(signmethod, keyid, inputurl, outputurl)
+func Client(args []string) {
+	fmt.Println(registration, keyid, inputurl, outputurl)
 	// Set up a connection to the grpc server.
 
 	// New code
@@ -56,15 +56,15 @@ func SignClient(args []string) {
 	defer conn.Close()
 
 	// Contact the server and print out its response.
-	c := pb.NewSigningRequestClient(conn)
+	c := pb.NewClientRequestClient(conn)
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 	defer cancel()
-	r, err := c.SendRequest(ctx, &pb.SignRequest{Signmethod: &signmethod, Keyid: &keyid, InputUrl: &inputurl, OutputPath: &outputurl})
+	r, err := c.SendRequest(ctx, &pb.Request{Registration: &registration, Id: &keyid, InputUrl: &inputurl, OutputPath: &outputurl})
 	if err != nil {
-		log.Fatalf("Could not send signing request: %v", err)
+		log.Fatalf("Could not send client request: %v", err)
 	}
 	log.Printf("Output url: %s", r.GetOutputUrl())
-	log.Printf("Status of signmethod: %s", r.GetStatus())
+	log.Printf("Status of method: %s", r.GetStatus())
 
 	name, err := upload.Upload(c, context.Background(), inputurl)
 	if err != nil {
@@ -76,22 +76,22 @@ func SignClient(args []string) {
 
 func main() {
 	var rootCmd = &cobra.Command{
-		Use: "The sign client to provide the signing service",
+		Use:     "The client to send request to the service",
 		Version: version,
 		Run: func(cmd *cobra.Command, args []string) {
-			SignClient(args)
+			Client(args)
 		},
 	}
 
 	var Verbose bool
 	rootCmd.PersistentFlags().BoolVarP(&Verbose, "verbose", "", false, "verbose output")
-	rootCmd.PersistentFlags().StringVarP(&signmethod, "signmethod", "", "", "Sign method")
-	rootCmd.PersistentFlags().StringVarP(&keyid, "keyid", "k", "", "Key id")
+	rootCmd.PersistentFlags().StringVarP(&registration, "registration", "r", "", "Registration")
+	rootCmd.PersistentFlags().StringVarP(&keyid, "id", "k", "", "id")
 	rootCmd.PersistentFlags().StringVarP(&inputurl, "inputurl", "i", "", "Input url")
 	rootCmd.PersistentFlags().StringVarP(&outputurl, "outputurl", "o", "", "Output url")
 	err := rootCmd.Execute()
 	if err != nil {
-		log.Fatalf("Error occured while running signc %s", err)
+		log.Fatalf("Error occured while running client %s", err)
 		os.Exit(1)
 	}
 }

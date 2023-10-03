@@ -5,19 +5,19 @@ from concurrent import futures
 import grpc
 # import time
 # import os
-import py_signc_pb2
-import py_signc_pb2_grpc
+import py_client_pb2
+import py_client_pb2_grpc
 
 # Coroutines to be invoked when the event loop is shutting down.
 _cleanup_coroutines = []
 
-class SignRequest(py_signc_pb2_grpc.SigningRequestServicer):
+class Request(py_client_pb2_grpc.ClientRequestServicer):
 
     async def SendRequest(
-            self, request: py_signc_pb2.SignRequest,
-            context: grpc.aio.ServicerContext) -> py_signc_pb2.SignResponse:
+            self, request: py_client_pb2.Request,
+            context: grpc.aio.ServicerContext) -> py_client_pb2.Response:
         print('Got request from a client', request)
-        return py_signc_pb2.SignResponse(status='Success, %s!' % request.signmethod, outputUrl='testurl')
+        return py_client_pb2.Response(status='Success, %s!' % request.registration, outputUrl='testurl')
 
     def UploadToServer(self, request_iterator, context):
         data = bytearray()
@@ -31,11 +31,11 @@ class SignRequest(py_signc_pb2_grpc.SigningRequestServicer):
             f.write(data)
             print('Finished writing the file onto the server')
             # time.sleep(20)
-        return py_signc_pb2.UploadResponse(name='Success!')
+        return py_client_pb2.UploadResponse(name='Success!')
 
 async def serve() -> None:
     server = grpc.aio.server(futures.ThreadPoolExecutor(max_workers=4))
-    py_signc_pb2_grpc.add_SigningRequestServicer_to_server(SignRequest(), server)
+    py_client_pb2_grpc.add_ClientRequestServicer_to_server(Request(), server)
     listen_addr = '[::]:50051'
     server.add_insecure_port(listen_addr)
     logging.info("Starting server on %s", listen_addr)
